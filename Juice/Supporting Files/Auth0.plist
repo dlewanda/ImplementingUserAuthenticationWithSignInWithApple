@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+   Auth0.plist
+   Juice
+
+   Created by Dave Lewanda on 8/18/22.
+   Copyright (c) 2022 Apple. All rights reserved.
+-->
+<plist version="1.0">
+    <dict>
+        <key>Domain</key>
+        <string>camtuck-test.auth0.com</string>
+        <key>ClientId</key>
+        <string>e4vKqX9Y2VjKLpbMjh1lTy3wcn2vbgok</string>
+    </dict>
+</plist>

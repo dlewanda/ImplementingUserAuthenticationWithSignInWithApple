@@ -7,11 +7,15 @@ Login view controller.
 
 import UIKit
 import AuthenticationServices
+import Auth0
 
 class LoginViewController: UIViewController {
     
+    @IBOutlet weak var emailTextField: UITextField!
+    @IBOutlet weak var passwordField: UITextField!
     @IBOutlet weak var loginProviderStackView: UIStackView!
-    
+    @IBOutlet weak var logInButton: UIButton!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupProviderLoginView()
@@ -22,6 +26,28 @@ class LoginViewController: UIViewController {
         performExistingAccountSetupFlows()
     }
     
+    @IBAction func logInButtonTapped(_ sender: Any) {
+//        guard let email = emailTextField.text,
+//              let password = passwordField.text else {
+//            return
+//        }
+
+        Auth0
+            .authentication()
+            .login(usernameOrEmail: "ctucker@diamondkinetics.com",
+                   password: "password",
+                   realmOrConnection: "Username-Password-Authentication",
+                   scope: "openid profile email offline_access")
+            .start { result in
+                switch result {
+                case .success(let credentials):
+                    print("Obtained credentials: \(credentials)")
+                case .failure(let error):
+                    print("Failed with: \(error)")
+                }
+            }
+    }
+
     /// - Tag: add_appleid_button
     func setupProviderLoginView() {
         let authorizationButton = ASAuthorizationAppleIDButton()
@@ -67,12 +93,36 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
             let userIdentifier = appleIDCredential.user
             let fullName = appleIDCredential.fullName
             let email = appleIDCredential.email
-            
+
             // For the purpose of this demo app, store the `userIdentifier` in the keychain.
             self.saveUserInKeychain(userIdentifier)
-            
+
+            // Call Auth0
+            // Convert Data -> String
+            guard let authorizationCode = appleIDCredential.authorizationCode, let authCode = String(data: authorizationCode, encoding: .utf8) else
+            {
+              print("Problem with the authorizationCode")
+              return
+            }
+
+            // Auth0 Token Exchange
+            Auth0
+                .authentication()
+                .login(appleAuthorizationCode: authCode)
+                .start { result in
+                    switch result {
+                    case .success(let credentials):
+                        print("Obtained credentials: \(credentials)")
+                    case .failure(let error):
+                        print("Failed with: \(error)")
+                    }
+                }
+
             // For the purpose of this demo app, show the Apple ID credential information in the `ResultViewController`.
-            self.showResultViewController(userIdentifier: userIdentifier, fullName: fullName, email: email)
+            self.showResultViewController(userIdentifier: userIdentifier,
+                                          fullName: fullName,
+                                          email: email,
+                                          authorizationCode: authCode)
         
         case let passwordCredential as ASPasswordCredential:
         
@@ -98,7 +148,7 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
         }
     }
     
-    private func showResultViewController(userIdentifier: String, fullName: PersonNameComponents?, email: String?) {
+    private func showResultViewController(userIdentifier: String, fullName: PersonNameComponents?, email: String?, authorizationCode: String?) {
         guard let viewController = self.presentingViewController as? ResultViewController
             else { return }
         
@@ -112,6 +162,9 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
             }
             if let email = email {
                 viewController.emailLabel.text = email
+            }
+            if let authorizationCode = authorizationCode {
+                viewController.authorizationCodeLabel.text = authorizationCode
             }
             self.dismiss(animated: true, completion: nil)
         }

@@ -14,6 +14,7 @@ class ResultViewController: UIViewController {
     @IBOutlet weak var givenNameLabel: UILabel!
     @IBOutlet weak var familyNameLabel: UILabel!
     @IBOutlet weak var emailLabel: UILabel!
+    @IBOutlet weak var authorizationCodeLabel: UILabel!
     @IBOutlet weak var signOutButton: UIButton!
     
     override func viewDidLoad() {
@@ -30,6 +31,7 @@ class ResultViewController: UIViewController {
         givenNameLabel.text = ""
         familyNameLabel.text = ""
         emailLabel.text = ""
+        authorizationCodeLabel.text = ""
         
         // Display the login controller again.
         DispatchQueue.main.async {

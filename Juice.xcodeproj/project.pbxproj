@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -15,10 +15,12 @@
 		169AA600227C0E4F00BAB850 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 169AA5FF227C0E4F00BAB850 /* Assets.xcassets */; };
 		169AA603227C0E4F00BAB850 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 169AA601227C0E4F00BAB850 /* LaunchScreen.storyboard */; };
 		169FA477227C3D79006A0051 /* ResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169FA476227C3D79006A0051 /* ResultViewController.swift */; };
+		A3D33DC728AE8F9700854308 /* Auth0 in Frameworks */ = {isa = PBXBuildFile; productRef = A3D33DC628AE8F9700854308 /* Auth0 */; };
+		A3D33DC928AE90D300854308 /* Auth0.plist in Resources */ = {isa = PBXBuildFile; fileRef = A3D33DC828AE90D300854308 /* Auth0.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		07E46E025A750FC829AA775D /* SampleCode.xcconfig */ = {isa = PBXFileReference; name = SampleCode.xcconfig; path = Configuration/SampleCode.xcconfig; sourceTree = "<group>"; };
+		07E46E025A750FC829AA775D /* SampleCode.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = SampleCode.xcconfig; path = Configuration/SampleCode.xcconfig; sourceTree = "<group>"; };
 		137212B01371F77000000001 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		160DE029227C29AC00DD88A7 /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
 		160DE02B227C31E500DD88A7 /* Juice.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Juice.entitlements; sourceTree = "<group>"; };
@@ -31,7 +33,8 @@
 		169AA602227C0E4F00BAB850 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		169AA604227C0E4F00BAB850 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		169FA476227C3D79006A0051 /* ResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultViewController.swift; sourceTree = "<group>"; };
-		9B548D815C2EEF38A11801AA /* LICENSE.txt */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE.txt; sourceTree = "<group>"; };
+		9B548D815C2EEF38A11801AA /* LICENSE.txt */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
+		A3D33DC828AE90D300854308 /* Auth0.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Auth0.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -40,6 +43,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				160DE02A227C29AC00DD88A7 /* AuthenticationServices.framework in Frameworks */,
+				A3D33DC728AE8F9700854308 /* Auth0 in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -61,6 +65,7 @@
 				169AA601227C0E4F00BAB850 /* LaunchScreen.storyboard */,
 				169AA5FF227C0E4F00BAB850 /* Assets.xcassets */,
 				169AA604227C0E4F00BAB850 /* Info.plist */,
+				A3D33DC828AE90D300854308 /* Auth0.plist */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";
@@ -111,7 +116,6 @@
 			children = (
 				9B548D815C2EEF38A11801AA /* LICENSE.txt */,
 			);
-			name = LICENSE;
 			path = LICENSE;
 			sourceTree = "<group>";
 		};
@@ -131,6 +135,9 @@
 			dependencies = (
 			);
 			name = Juice;
+			packageProductDependencies = (
+				A3D33DC628AE8F9700854308 /* Auth0 */,
+			);
 			productName = Juice;
 			productReference = 169AA5F5227C0E4E00BAB850 /* Juice.app */;
 			productType = "com.apple.product-type.application";
@@ -159,6 +166,9 @@
 				Base,
 			);
 			mainGroup = 169AA5EC227C0E4E00BAB850;
+			packageReferences = (
+				A3D33DC528AE8F9700854308 /* XCRemoteSwiftPackageReference "Auth0" */,
+			);
 			productRefGroup = 169AA5F6227C0E4E00BAB850 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -176,6 +186,7 @@
 				169AA603227C0E4F00BAB850 /* LaunchScreen.storyboard in Resources */,
 				169AA600227C0E4F00BAB850 /* Assets.xcassets in Resources */,
 				169AA5FE227C0E4E00BAB850 /* Main.storyboard in Resources */,
+				A3D33DC928AE90D300854308 /* Auth0.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -343,7 +354,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = NO;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 56HBP847HW;
 				INFOPLIST_FILE = "Juice/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -369,7 +380,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = NO;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 56HBP847HW;
 				INFOPLIST_FILE = "Juice/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -407,6 +418,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A3D33DC528AE8F9700854308 /* XCRemoteSwiftPackageReference "Auth0" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/auth0/Auth0.swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A3D33DC628AE8F9700854308 /* Auth0 */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A3D33DC528AE8F9700854308 /* XCRemoteSwiftPackageReference "Auth0" */;
+			productName = Auth0;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 169AA5ED227C0E4E00BAB850 /* Project object */;
 }
