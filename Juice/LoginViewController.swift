@@ -27,17 +27,20 @@ class LoginViewController: UIViewController {
     }
     
     @IBAction func logInButtonTapped(_ sender: Any) {
-//        guard let email = emailTextField.text,
-//              let password = passwordField.text else {
-//            return
-//        }
+        guard let email = emailTextField.text,
+              let password = passwordField.text else {
+            return
+        }
 
         let url = URL(string: "https://devapi.diamondkinetics.com/v6/users/profile")!
         
+        //jwzmplbdktfapmin@dk.com
+        // password
+        
         Auth0
             .authentication()
-            .login(usernameOrEmail: "jwzmplbdktfapmin@dk.com",
-                   password: "password",
+            .login(usernameOrEmail: email,
+                   password: password,
                    realmOrConnection: "Username-Password-Authentication",
                    audience: "https://devapi.diamondkinetics.com",
                    scope: "openid profile email offline_access")
@@ -118,6 +121,8 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
               return
             }
 
+            let url = URL(string: "https://devapi.diamondkinetics.com/v6/users/profile")!
+            
             // Auth0 Token Exchange
             Auth0
                 .authentication()
@@ -125,6 +130,16 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
                 .start { result in
                     switch result {
                     case .success(let credentials):
+                        let sessionConfig = URLSessionConfiguration.default
+                        sessionConfig.httpAdditionalHeaders = [
+                            "Authorization": "Bearer \(credentials.accessToken)"
+                        ]
+                        let session = URLSession(configuration: sessionConfig)
+                        let task = session.dataTask(with: url) {(data, response, error) in
+                            guard let data = data else {return}
+                            print(String(data: data, encoding: .utf8)!)
+                        }
+                        task.resume()
                         print("Obtained credentials: \(credentials)")
                     case .failure(let error):
                         print("Failed with: \(error)")
