@@ -32,14 +32,14 @@ class LoginViewController: UIViewController {
 //            return
 //        }
 
-        let url = URL(string: "http://localhost:8080/v6/users/profile")!
+        let url = URL(string: "https://devapi.diamondkinetics.com/v6/users/profile")!
         
         Auth0
             .authentication()
             .login(usernameOrEmail: "jwzmplbdktfapmin@dk.com",
                    password: "password",
                    realmOrConnection: "Username-Password-Authentication",
-                   audience: "http://localhost:8080/",
+                   audience: "https://devapi.diamondkinetics.com",
                    scope: "openid profile email offline_access")
             .start { result in
                 switch result {
