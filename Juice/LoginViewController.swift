@@ -32,15 +32,28 @@ class LoginViewController: UIViewController {
 //            return
 //        }
 
+        let url = URL(string: "http://localhost:8080/v6/users/profile")!
+        
         Auth0
             .authentication()
-            .login(usernameOrEmail: "ctucker@diamondkinetics.com",
+            .login(usernameOrEmail: "jwzmplbdktfapmin@dk.com",
                    password: "password",
                    realmOrConnection: "Username-Password-Authentication",
+                   audience: "http://localhost:8080/",
                    scope: "openid profile email offline_access")
             .start { result in
                 switch result {
                 case .success(let credentials):
+                    let sessionConfig = URLSessionConfiguration.default
+                    sessionConfig.httpAdditionalHeaders = [
+                        "Authorization": "Bearer \(credentials.accessToken)"
+                    ]
+                    let session = URLSession(configuration: sessionConfig)
+                    let task = session.dataTask(with: url) {(data, response, error) in
+                        guard let data = data else {return}
+                        print(String(data: data, encoding: .utf8)!)
+                    }
+                    task.resume()
                     print("Obtained credentials: \(credentials)")
                 case .failure(let error):
                     print("Failed with: \(error)")
