@@ -15,6 +15,9 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var passwordField: UITextField!
     @IBOutlet weak var loginProviderStackView: UIStackView!
     @IBOutlet weak var logInButton: UIButton!
+    @IBOutlet weak var googleButton: UIButton!
+
+    let url = URL(string: "https://devapi.diamondkinetics.com/v6/users/profile")!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,13 +29,25 @@ class LoginViewController: UIViewController {
         performExistingAccountSetupFlows()
     }
     
-    @IBAction func logInButtonTapped(_ sender: Any) {
-//        guard let email = emailTextField.text,
-//              let password = passwordField.text else {
-//            return
-//        }
+    fileprivate func handleCredentials(_ credentials: (Credentials)) {
+        let sessionConfig = URLSessionConfiguration.default
+        sessionConfig.httpAdditionalHeaders = [
+            "Authorization": "Bearer \(credentials.accessToken)"
+        ]
+        let session = URLSession(configuration: sessionConfig)
+        let task = session.dataTask(with: url) {(data, response, error) in
+            guard let data = data else {return}
+            print(String(data: data, encoding: .utf8)!)
+        }
+        task.resume()
+        print("Obtained credentials: \(credentials)")
+    }
 
-        let url = URL(string: "https://devapi.diamondkinetics.com/v6/users/profile")!
+    @IBAction func logInButtonTapped(_ sender: Any) {
+        guard let email = emailTextField.text,
+              let password = passwordField.text else {
+            return
+        }
         
         // jwzmplbdktfapmin@dk.com
         // password
@@ -40,33 +55,32 @@ class LoginViewController: UIViewController {
 //        Auth0
 //            .authentication()
 //            .renew(withRefreshToken: <#T##String#>, scope: <#T##String?#>)
-        
-//        Auth0
-//            .webAuth()
-//            .audience("https://devapi.diamondkinetics.com")
-//            .start(<#T##callback: (WebAuthResult<Credentials>) -> Void##(WebAuthResult<Credentials>) -> Void#>)
-        
+
         Auth0
             .authentication()
-            .login(usernameOrEmail: "jwzmplbdktfapmin@dk.com",
-                   password: "password",
+            .login(usernameOrEmail: email,
+                   password: password,
                    realmOrConnection: "Username-Password-Authentication",
                    audience: "https://devapi.diamondkinetics.com",
                    scope: "openid profile email offline_access")
-            .start { result in
+            .start { [weak self] result in
                 switch result {
                 case .success(let credentials):
-                    let sessionConfig = URLSessionConfiguration.default
-                    sessionConfig.httpAdditionalHeaders = [
-                        "Authorization": "Bearer \(credentials.accessToken)"
-                    ]
-                    let session = URLSession(configuration: sessionConfig)
-                    let task = session.dataTask(with: url) {(data, response, error) in
-                        guard let data = data else {return}
-                        print(String(data: data, encoding: .utf8)!)
-                    }
-                    task.resume()
-                    print("Obtained credentials: \(credentials)")
+                    self?.handleCredentials(credentials)
+                case .failure(let error):
+                    print("Failed with: \(error)")
+                }
+            }
+    }
+
+    @IBAction func signInWithGoogle(_ sender: Any) {
+        Auth0
+            .webAuth()
+            .audience("https://devapi.diamondkinetics.com")
+            .start { [weak self] result in
+                switch result {
+                case .success(let credentials):
+                    self?.handleCredentials(credentials)
                 case .failure(let error):
                     print("Failed with: \(error)")
                 }
@@ -129,14 +143,14 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
               print("Problem with the authorizationCode")
               return
             }
-
-            let url = URL(string: "https://devapi.diamondkinetics.com/v6/users/profile")!
             
             // Auth0 Token Exchange
             Auth0
                 .authentication()
                 .login(appleAuthorizationCode: authCode)
-                .start { result in
+                .start { [weak self] result in
+                    guard let self else { return }
+
                     switch result {
                     case .success(let credentials):
                         let sessionConfig = URLSessionConfiguration.default
@@ -144,7 +158,7 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
                             "Authorization": "Bearer \(credentials.accessToken)"
                         ]
                         let session = URLSession(configuration: sessionConfig)
-                        let task = session.dataTask(with: url) {(data, response, error) in
+                        let task = session.dataTask(with: self.url) {(data, response, error) in
                             guard let data = data else {return}
                             print(String(data: data, encoding: .utf8)!)
                         }
