@@ -27,20 +27,29 @@ class LoginViewController: UIViewController {
     }
     
     @IBAction func logInButtonTapped(_ sender: Any) {
-        guard let email = emailTextField.text,
-              let password = passwordField.text else {
-            return
-        }
+//        guard let email = emailTextField.text,
+//              let password = passwordField.text else {
+//            return
+//        }
 
         let url = URL(string: "https://devapi.diamondkinetics.com/v6/users/profile")!
         
-        //jwzmplbdktfapmin@dk.com
+        // jwzmplbdktfapmin@dk.com
         // password
+        
+//        Auth0
+//            .authentication()
+//            .renew(withRefreshToken: <#T##String#>, scope: <#T##String?#>)
+        
+//        Auth0
+//            .webAuth()
+//            .audience("https://devapi.diamondkinetics.com")
+//            .start(<#T##callback: (WebAuthResult<Credentials>) -> Void##(WebAuthResult<Credentials>) -> Void#>)
         
         Auth0
             .authentication()
-            .login(usernameOrEmail: email,
-                   password: password,
+            .login(usernameOrEmail: "jwzmplbdktfapmin@dk.com",
+                   password: "password",
                    realmOrConnection: "Username-Password-Authentication",
                    audience: "https://devapi.diamondkinetics.com",
                    scope: "openid profile email offline_access")
