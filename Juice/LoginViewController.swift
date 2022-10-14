@@ -27,6 +27,8 @@ class LoginViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         performExistingAccountSetupFlows()
+        emailTextField.text = "jwzmplbdktfapmin@dk.com"
+        passwordField.text = "password"
     }
     
     fileprivate func handleCredentials(_ credentials: (Credentials)) {
