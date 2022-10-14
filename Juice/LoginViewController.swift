@@ -89,6 +89,28 @@ class LoginViewController: UIViewController {
             }
     }
 
+    @IBAction func createAccount(_ sender: Any) {
+        guard let email = emailTextField.text,
+              let password = passwordField.text else {
+            return
+        }
+
+        Auth0
+            .authentication()
+            .signup(email: email,
+                    password: password,
+                    connection: "Username-Password-Authentication",
+                    userMetadata: ["first_name": "Test", "last_name": "User"])
+            .start { result in
+                switch result {
+                case .success(let user):
+                    print("User signed up: \(user)")
+                case .failure(let error):
+                    print("Failed with: \(error)")
+                }
+            }
+    }
+
     /// - Tag: add_appleid_button
     func setupProviderLoginView() {
         let authorizationButton = ASAuthorizationAppleIDButton()
