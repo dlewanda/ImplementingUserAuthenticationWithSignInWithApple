@@ -11,11 +11,11 @@ import Auth0
 
 class LoginViewController: UIViewController {
     
-    @IBOutlet weak var emailTextField: UITextField!
-    @IBOutlet weak var passwordField: UITextField!
     @IBOutlet weak var loginProviderStackView: UIStackView!
     @IBOutlet weak var logInButton: UIButton!
     @IBOutlet weak var googleButton: UIButton!
+    @IBOutlet weak var emailTextField: UITextField!
+    @IBOutlet weak var passwordField: UITextField!
 
     let url = URL(string: "https://devapi.diamondkinetics.com/v6/users/profile")!
 
@@ -78,7 +78,6 @@ class LoginViewController: UIViewController {
     @IBAction func signInWithGoogle(_ sender: Any) {
         Auth0
             .webAuth()
-            .audience("https://devapi.diamondkinetics.com")
             .start { [weak self] result in
                 switch result {
                 case .success(let credentials):
