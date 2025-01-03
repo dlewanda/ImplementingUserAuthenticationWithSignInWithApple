@@ -17,7 +17,8 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
 
-    let url = URL(string: "https://devapi.diamondkinetics.com/v6/users/profile")!
+    let profileURL = URL(string: "https://devapi.diamondkinetics.com/v6/users/profile")!
+    let usersURL = URL(string: "https://devapi.diamondkinetics.com/v6/users")!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,14 +31,18 @@ class LoginViewController: UIViewController {
         emailTextField.text = "jwzmplbdktfapmin@dk.com"
         passwordField.text = "password"
     }
-    
-    fileprivate func handleCredentials(_ credentials: (Credentials)) {
+
+//    private func createRequestDataTask() -> URLSessionDataTask {
+//
+//    }
+
+    private func handleCredentials(_ credentials: (Credentials)) {
         let sessionConfig = URLSessionConfiguration.default
         sessionConfig.httpAdditionalHeaders = [
             "Authorization": "Bearer \(credentials.accessToken)"
         ]
         let session = URLSession(configuration: sessionConfig)
-        let task = session.dataTask(with: url) {(data, response, error) in
+        let task = session.dataTask(with: profileURL) {(data, response, error) in
             guard let data = data else {return}
             print(String(data: data, encoding: .utf8)!)
         }
@@ -84,6 +89,25 @@ class LoginViewController: UIViewController {
                     self?.handleCredentials(credentials)
                 case .failure(let error):
                     print("Failed with: \(error)")
+                }
+            }
+    }
+
+    @IBAction func forgotPassword(_ sender: Any) {
+        guard let email = emailTextField.text else {
+            return
+        }
+
+        Auth0
+            .authentication()
+            .resetPassword(email: email,
+                           connection: "Username-Password-Authentication")
+            .start { result in
+                switch result {
+                case .success():
+                    print("Reset Password Success")
+                case .failure(let authError):
+                    print("Failed with: \(authError)")
                 }
             }
     }
@@ -181,7 +205,7 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
                             "Authorization": "Bearer \(credentials.accessToken)"
                         ]
                         let session = URLSession(configuration: sessionConfig)
-                        let task = session.dataTask(with: self.url) {(data, response, error) in
+                        let task = session.dataTask(with: self.profileURL) {(data, response, error) in
                             guard let data = data else {return}
                             print(String(data: data, encoding: .utf8)!)
                         }
